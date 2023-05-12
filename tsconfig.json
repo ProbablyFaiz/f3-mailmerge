@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "types": ["gas-types-detailed", "node"],
+    "jsx": "react",
+    "esModuleInterop": true,
+    "lib": ["es2020", "dom"],
+    "target": "ES6",
+    "experimentalDecorators": true,
+    "moduleResolution": "node16"
+  }
+}
