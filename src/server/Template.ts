@@ -1,4 +1,5 @@
 import { EmailTemplate, FilledTemplate, Recipient } from "../Types";
+import structuredClone from '@ungap/structured-clone';
 
 const getTemplate = (draftId: string): EmailTemplate => {
   const draft = GmailApp.getDraft(draftId);
@@ -7,7 +8,7 @@ const getTemplate = (draftId: string): EmailTemplate => {
     id: draftId,
     subject: message.getSubject(),
     starred: message.isStarred(),
-    dateCreated: message.getDate(),
+    dateCreated: message.getDate().toISOString(),
     body: message.getBody(),
     cc: message.getCc(),
     bcc: message.getBcc(),

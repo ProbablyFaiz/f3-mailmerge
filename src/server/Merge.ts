@@ -17,7 +17,7 @@ function GetGmailDrafts(): EmailDraft[] {
       id: draft.getId(),
       subject: message.getSubject(),
       starred: message.isStarred(),
-      dateCreated: message.getDate(),
+      dateCreated: message.getDate().toISOString(),
     };
   });
 }
@@ -52,11 +52,13 @@ function RunMailMerge(mergeConfig: MergeConfig) {
 const sendEmail =
   (mergeConfig: MergeConfig, template: FilledTemplate) =>
   (recipient: Recipient) => {
+    const plainTextBody = template.body.replace(/<[^>]*>?/gm, "");
     GmailApp.sendEmail(
       recipient.emailAddress,
       template.subject,
-      template.body,
+      plainTextBody,
       {
+        htmlBody: template.body,
         attachments: template.attachments,
         cc: template.cc,
         bcc: template.bcc,

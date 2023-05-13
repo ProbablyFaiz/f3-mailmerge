@@ -45,17 +45,17 @@ const devDialogEntry = "./dev/index.js";
 // define client entry points and output names
 const clientEntrypoints = [
   {
-    name: "CLIENT - Ballot Entry",
+    name: "CLIENT - Merge Wizard",
     entry: "./src/client/merge_wizard/index.js",
     filename: "merge_wizard",
     template: "./src/client/merge_wizard/index.html",
   },
-  {
-    name: "CLIENT - Sidebar About Page",
-    entry: "./src/client/sidebar-about-page/index.js",
-    filename: "sidebar-about-page",
-    template: "./src/client/sidebar-about-page/index.html",
-  },
+  // {
+  //   name: "CLIENT - Sidebar About Page",
+  //   entry: "./src/client/sidebar-about-page/index.js",
+  //   filename: "sidebar-about-page",
+  //   template: "./src/client/sidebar-about-page/index.html",
+  // },
 ];
 
 // define certificate locations

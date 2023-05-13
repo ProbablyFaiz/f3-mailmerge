@@ -1,4 +1,4 @@
-import { onOpen, openBallotEntry, openAboutSidebar } from "./ui";
+import { onOpen, openMergeWizard, openAboutSidebar } from "./ui";
 import {
   GetDefaultMergeConfig,
   GetGmailDrafts,
@@ -9,7 +9,7 @@ import {
 // Public functions must be exported as named exports
 export {
   onOpen,
-  openBallotEntry,
+  openMergeWizard,
   openAboutSidebar,
   GetDefaultMergeConfig,
   GetGmailDrafts,
@@ -20,7 +20,7 @@ export {
 // The webpack functionality for adding these to the global scope is not working
 // so we have to add them manually
 global.onOpen = onOpen;
-global.openBallotEntry = openBallotEntry;
+global.openMergeWizard = openMergeWizard;
 global.openAboutSidebar = openAboutSidebar;
 global.GetDefaultMergeConfig = GetDefaultMergeConfig;
 global.GetGmailDrafts = GetGmailDrafts;

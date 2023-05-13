@@ -1,6 +1,12 @@
 /* needed to make consistent test snapshots across OSs */
 body {
-  font-family: Arial !important;
+  font-family: Arial, sans-serif !important;
+}
+
+.action-panel {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 
 /*

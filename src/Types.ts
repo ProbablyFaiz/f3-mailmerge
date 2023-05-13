@@ -1,7 +1,7 @@
 interface EmailTemplate {
   id: string;
   subject: string;
-  dateCreated: Date;
+  dateCreated: string;
   starred: boolean;
   body: string;
   cc: string;
@@ -26,6 +26,10 @@ interface Recipient {
   emailAddress: string;
   uuid: string;
   properties: Record<string, string>;
+}
+
+interface SessionInfo {
+  remainingRecipients: number;
 }
 
 export { EmailTemplate, EmailDraft, FilledTemplate, MergeConfig, Recipient };
