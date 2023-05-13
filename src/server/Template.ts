@@ -22,11 +22,16 @@ const getTemplate = (draftId: string): EmailTemplate => {
 const fillTemplate =
   (template: EmailTemplate) =>
   (recipient: Recipient): FilledTemplate => {
-    // Replace all the placeholders in the subject and body
-    const filled: FilledTemplate = {
-      ...structuredClone(template),
+    let filled: FilledTemplate = {
+      ...template,
       filled: true,
     };
+    // This is an ugly hack to get around not being able
+    // to structuredClone attachments.
+    delete filled.attachments;
+    filled = structuredClone(filled);
+    filled.attachments = template.attachments;
+
     filled.subject = fillPlaceholders(template.subject, recipient.properties);
     filled.body = fillPlaceholders(template.body, recipient.properties);
     return filled;
