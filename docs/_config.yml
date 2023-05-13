@@ -1,0 +1,8 @@
+title: F3 Mail Merge
+description: A completely free and open-source mail merge tool for Gmail/Google Sheets.
+url: https://f3.ucsbmootcourt.org
+baseurl: ""
+
+remote_theme: pages-themes/minimal@v0.2.0
+plugins:
+  - jekyll-remote-theme
