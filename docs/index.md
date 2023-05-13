@@ -29,7 +29,7 @@ The options are as follows:
 - **Email Template**: This is derived from the list of drafts in your Gmail account.
   Select the draft you want to use as the template for your mail merge. The draft
   should have placeholders for the data you want to insert in the body and/or subject.
-  Placeholders are of the form `{{column_name}}`, where `column_name` is the name of
+  Placeholders are of the form {% raw %}`{{column_name}}`{% endraw %}, where `column_name` is the name of
   the column in your spreadsheet that contains the data you want to insert.
 
 ## Limitations
