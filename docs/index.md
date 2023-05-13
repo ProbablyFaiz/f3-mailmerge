@@ -46,6 +46,7 @@ to a couple of limitations:
 Other than that, please enjoy using F3 Mail Merge (and your extra $20–200/year from not paying
 for something else)! If you find it useful, please do share it with your friends and colleagues.
 
-## License
+## Legal Stuff
 
-See [LICENSE](LICENSE).
+The license can be found [here](https://github.com/ProbablyFaiz/f3-mailmerge/blob/master/LICENSE).
+The privacy policy is [here](privacy.md).
