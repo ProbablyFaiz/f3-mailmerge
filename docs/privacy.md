@@ -2,7 +2,7 @@
 
 Privacy Policy for F3 Mail Merge
 
-Last updated: May 12, 2023
+*Last updated: May 12, 2023*
 
 1. Introduction
 

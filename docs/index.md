@@ -1,6 +1,6 @@
 # F3 Mail Merge
 
-<img src="docs/assets/logo.jpg" alt="F3 Mail Merge logo" width="100px"/>
+<img src="assets/logo.jpg" alt="F3 Mail Merge logo" width="100px"/>
 
 Faiz's Fully Free Mail Merge (F3 Mail Merge) is a mail-merge tool for Gmail and Google Sheets.
 
@@ -20,7 +20,7 @@ you should see a new menu item called "F3 Mail Merge" in the toolbar.
 Navigate to the sheet with your merge data on it and select "Start Mail Merge" to begin.
 After a few seconds, you'll see a view like this:
 
-![Screenshot of F3 Mail Merge](docs/assets/screenshot.png)
+<img src="assets/screenshot.png" alt="Screenshot of F3 Mail Merge" width="600px"/>
 
 The options are as follows:
 
