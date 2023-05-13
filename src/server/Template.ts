@@ -1,5 +1,5 @@
 import { EmailTemplate, FilledTemplate, Recipient } from "../Types";
-import structuredClone from '@ungap/structured-clone';
+import structuredClone from "@ungap/structured-clone";
 
 const getTemplate = (draftId: string): EmailTemplate => {
   const draft = GmailApp.getDraft(draftId);
@@ -52,8 +52,20 @@ const fillPlaceholders = (
   });
 };
 
+const getKeysInTemplate = (draft: EmailTemplate): string[] => {
+  const keys = new Set<string>();
+  const findKeys = (text: string) => {
+    return [...text.matchAll(PLACEHOLDER_REGEX)].map((match) =>
+      getCleanKey(match[1])
+    );
+  };
+  findKeys(draft.subject).forEach((key) => keys.add(key));
+  findKeys(draft.body).forEach((key) => keys.add(key));
+  return Array.from(keys);
+};
+
 const getCleanKey = (key: string): string => {
   return key.toLowerCase().trim();
 };
 
-export { getTemplate, fillTemplate };
+export { getTemplate, fillTemplate, getKeysInTemplate };

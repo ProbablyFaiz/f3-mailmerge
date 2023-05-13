@@ -4,6 +4,7 @@ import {
   GetGmailDrafts,
   RunMailMerge,
   SendTestEmail,
+  GetMergeHints,
 } from "./Merge";
 
 // Public functions must be exported as named exports
@@ -15,6 +16,7 @@ export {
   GetGmailDrafts,
   RunMailMerge,
   SendTestEmail,
+  GetMergeHints,
 };
 
 // The webpack functionality for adding these to the global scope is not working
@@ -26,3 +28,4 @@ global.GetDefaultMergeConfig = GetDefaultMergeConfig;
 global.GetGmailDrafts = GetGmailDrafts;
 global.RunMailMerge = RunMailMerge;
 global.SendTestEmail = SendTestEmail;
+global.GetMergeHints = GetMergeHints;

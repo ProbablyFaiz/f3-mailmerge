@@ -28,8 +28,11 @@ interface Recipient {
   properties: Record<string, string>;
 }
 
-interface SessionInfo {
+interface MergeHints {
   remainingRecipients: number;
+  numEmailsToBeSent: number;
+  emailColumn: string;
+  missingKeys?: string[];
 }
 
-export { EmailTemplate, EmailDraft, FilledTemplate, MergeConfig, Recipient };
+export { EmailTemplate, EmailDraft, FilledTemplate, MergeConfig, Recipient, MergeHints };

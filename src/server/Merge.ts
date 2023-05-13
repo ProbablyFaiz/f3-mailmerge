@@ -3,9 +3,11 @@ import {
   EmailTemplate,
   FilledTemplate,
   MergeConfig,
+  MergeHints,
   Recipient,
 } from "../Types";
-import { fillTemplate, getTemplate } from "./Template";
+import { fillTemplate, getKeysInTemplate, getTemplate } from "./Template";
+import { memoize } from "./CacheHelper";
 
 type Cell = string | number | boolean | Date;
 
@@ -47,6 +49,30 @@ function RunMailMerge(mergeConfig: MergeConfig) {
     const template = fillTemplateForRecipient(recipient);
     sendEmail(mergeConfig, template)(recipient);
   });
+}
+
+function GetMergeHints(
+  mergeConfig: MergeConfig = GetDefaultMergeConfig()
+): MergeHints {
+  const recipientQuota = MailApp.getRemainingDailyQuota();
+  const recipients = getRecipients(mergeConfig.sheetId);
+  const emailColumn = identifyEmailKey(getSheetRecords(mergeConfig.sheetId));
+  const output: MergeHints = {
+    remainingRecipients: recipientQuota,
+    numEmailsToBeSent: recipients.length,
+    emailColumn,
+  };
+  if (mergeConfig.draftId != undefined) {
+    const template = getTemplate(mergeConfig.draftId);
+    const templateKeys = getKeysInTemplate(template);
+    const sheetKeys = Object.keys(recipients[0].properties);
+    // Check if there are any keys in the template that aren't in the sheet
+    const missingKeys = templateKeys.filter((key) => !sheetKeys.includes(key));
+    if (missingKeys.length > 0) {
+      output.missingKeys = missingKeys;
+    }
+  }
+  return output;
 }
 
 const sendEmail =
@@ -164,4 +190,10 @@ const getRecipientUuid = () => {
   return `F3-R-${Utilities.getUuid().substring(0, 12)}`;
 };
 
-export { GetGmailDrafts, GetDefaultMergeConfig, SendTestEmail, RunMailMerge };
+export {
+  GetGmailDrafts,
+  GetDefaultMergeConfig,
+  SendTestEmail,
+  RunMailMerge,
+  GetMergeHints,
+};

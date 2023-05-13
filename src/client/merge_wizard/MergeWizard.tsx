@@ -14,11 +14,12 @@ import {
 } from "react-bootstrap";
 import { ArrowClockwise } from "react-bootstrap-icons";
 
-import { EmailDraft, MergeConfig } from "../../Types";
+import { EmailDraft, MergeConfig, MergeHints } from "../../Types";
 
 interface MergeState {
   drafts: EmailDraft[];
   mergeConfig: MergeConfig;
+  mergeHints: MergeHints;
   loaded: boolean;
   snackbar: {
     variant: "success" | "danger";
@@ -32,8 +33,9 @@ class MergeWizard extends React.Component<{}, MergeState> {
     this.state = {
       drafts: undefined,
       mergeConfig: undefined,
-      loaded: false,
+      mergeHints: undefined,
       snackbar: undefined,
+      loaded: false,
     };
   }
 
@@ -47,7 +49,23 @@ class MergeWizard extends React.Component<{}, MergeState> {
       }
       this.setState({ mergeConfig, drafts, loaded: true });
     });
+    this.refreshMergeHints();
   }
+
+  refreshMergeHints = () => {
+    serverFunctions.GetMergeHints().then((mergeHints) => {
+      const stateUpdate = { mergeHints };
+      if (mergeHints?.missingKeys) {
+        stateUpdate["snackbar"] = {
+          variant: "danger",
+          message: `Email template has keys that are not in the spreadsheet: ${mergeHints.missingKeys.join(
+            ", "
+          )}`,
+        };
+      }
+      this.setState(stateUpdate);
+    });
+  };
 
   refreshDrafts = () => {
     this.setState({ loaded: false });
@@ -95,19 +113,43 @@ class MergeWizard extends React.Component<{}, MergeState> {
   };
 
   onRunMailMergeClick = () => {
-    serverFunctions.RunMailMerge(this.state.mergeConfig).then(() => {
-      this.setState({
-        snackbar: {
-          variant: "success",
-          message: "Mail merge complete!",
-        },
+    this.setState({ loaded: false });
+    serverFunctions
+      .RunMailMerge(this.state.mergeConfig)
+      .then(() => {
+        this.setState({
+          snackbar: {
+            variant: "success",
+            message: "Mail merge complete!",
+          },
+        });
+      })
+      .catch(() => {
+        this.setState({
+          snackbar: {
+            variant: "danger",
+            message: "Mail merge failed.",
+          },
+        });
+      })
+      .finally(() => {
+        this.setState({ loaded: true });
       });
+  };
+
+  onSelectedDraftChange = (selectedId: string) => {
+    this.setState({
+      mergeConfig: {
+        ...this.state.mergeConfig,
+        draftId: selectedId,
+      },
     });
+    this.refreshMergeHints();
   };
 
   render() {
     return (
-      <React.Fragment>
+      <div style={{ width: "97%" }}>
         {this.state.snackbar && (
           <Alert
             variant={this.state.snackbar.variant}
@@ -147,14 +189,7 @@ class MergeWizard extends React.Component<{}, MergeState> {
                       ? this.state.mergeConfig.draftId
                       : ""
                   }
-                  onChange={(e) => {
-                    this.setState({
-                      mergeConfig: {
-                        ...this.state.mergeConfig,
-                        draftId: e.target.value,
-                      },
-                    });
-                  }}
+                  onChange={(e) => this.onSelectedDraftChange(e.target.value)}
                 >
                   {this.state.drafts?.map((draft) => {
                     // Show the date in format "Apr. 6, 2020 12:00 AM"
@@ -192,13 +227,12 @@ class MergeWizard extends React.Component<{}, MergeState> {
           </Form.Group>
         </Form>
         <Row>
-          <Col xs={4}>
+          <Col
+            xs={4}
+            className="d-flex justify-content-end align-items-end pr-0"
+          >
             {!this.state.loaded && (
-              <Spinner
-                animation={"border"}
-                className="d-flex justify-content-end"
-                size="sm"
-              />
+              <Spinner animation="border" className="mb-2" size="sm" />
             )}
           </Col>
           <Col xs={8} className="ml-auto">
@@ -216,12 +250,27 @@ class MergeWizard extends React.Component<{}, MergeState> {
                 disabled={!this.state.loaded}
                 onClick={this.onRunMailMergeClick}
               >
-                Send All Emails
+                {this.state.mergeHints
+                  ? `Send ${this.state.mergeHints.numEmailsToBeSent} Email` +
+                    (this.state.mergeHints.numEmailsToBeSent > 1 ? "s" : "")
+                  : "Send All Emails"}
               </Button>
             </ButtonGroup>
           </Col>
         </Row>
-      </React.Fragment>
+        {this.state.mergeHints && (
+          <div className="text-muted small text-right mt-2">
+            <p className="mb-0">
+              Emails will be sent to recipients in the{" "}
+              <b>{this.state.mergeHints.emailColumn}</b> column.
+            </p>
+            <p>
+              Current quota: {this.state.mergeHints.remainingRecipients}{" "}
+              recipients remaining
+            </p>
+          </div>
+        )}
+      </div>
     );
   }
 }
